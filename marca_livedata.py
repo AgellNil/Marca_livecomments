@@ -1,5 +1,6 @@
-#%%
+# %%
 import time
+import fire
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -25,8 +26,6 @@ def obtener_equipos_desde_url(url):
         return equipo_local, equipo_visitante
     else:
         return None, None
-
-
 
 
 def scrape_comments_live(url, aux):
@@ -103,12 +102,16 @@ def scrape_comments_live(url, aux):
                 data.append([equipo_a, equipo_b, username, num_comment, date, hora, comment, respon])
 
     driver.quit()
-    df = pd.DataFrame(data, columns=['equip_l', 'equip_v', 'nom_usuari', 'num_comment', 'data', 'hora', 'comment', 'num_referencia'])
+    df = pd.DataFrame(data, columns=['equip_l', 'equip_v', 'nom_usuari', 'num_comment', 'data', 'hora', 'comment',
+                                     'num_referencia'])
     return df
-#%%
+
+
+# %%
 
 def create_comment_dataframe_with_timeout(url):
-    comentarios = pd.DataFrame(columns=['equip_l', 'equip_v', 'nom_usuari', 'num_comment', 'data', 'hora', 'comment', 'num_referencia'])
+    comentarios = pd.DataFrame(
+        columns=['equip_l', 'equip_v', 'nom_usuari', 'num_comment', 'data', 'hora', 'comment', 'num_referencia'])
     aux = 0
     start_time = datetime.now()  # Registra la hora de inicio
 
@@ -134,8 +137,15 @@ def create_comment_dataframe_with_timeout(url):
         pass
 
     return comentarios
-# Ejemplo de uso, donde 'URL_DEL_PARTIDO' es la URL real del partido
-a=create_comment_dataframe_with_timeout('https://www.marca.com/futbol/champions-league/braga-r-madrid/2023/10/24/01_0103_20231024_372_186-directo.html')
-# %%
-a.to_csv('barcamadrid.csv')
-# %%
+
+
+def main(input_url, output_file):
+    # Ejemplo de uso, donde 'URL_DEL_PARTIDO' es la URL real del partido
+    df = create_comment_dataframe_with_timeout(input_url)
+    # %%
+    df.to_csv('barcamadrid.csv')
+    # %%
+
+if __name__ == '__main__':
+    #main('https://www.marca.com/futbol/primera-division/barcelona-vs-real-madrid/cronica/2021/10/24/6175b1a3e2704e8b6d8b45c8.html', 'barcamadrid.csv')
+    fire.Fire(main)
