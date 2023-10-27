@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
 import pandas as pd
 import re
@@ -30,9 +30,9 @@ def obtener_equipos_desde_url(url):
 
 def scrape_comments_live(url, aux):
     equipo_a, equipo_b = obtener_equipos_desde_url(url)
-    firefox_options = Options()
-    firefox_options.add_argument("--headless")
-    driver = webdriver.Firefox(options=firefox_options)
+    options = Options()
+    options.headless = True
+    driver = webdriver.Firefox(options=options)
     driver.get(url)
     time.sleep(5)
 
@@ -41,7 +41,7 @@ def scrape_comments_live(url, aux):
         agree_button = driver.find_element(By.ID, "didomi-notice-agree-button")
         agree_button.click()
         time.sleep(5)
-    except:
+    except Exception as e:
         pass
 
     ver_comentarios_button = driver.find_element(By.XPATH, "//button[@title='Ver comentarios']")
@@ -146,6 +146,7 @@ def main(input_url, output_file):
     df.to_csv('barcamadrid.csv')
     # %%
 
+
 if __name__ == '__main__':
-    #main('https://www.marca.com/futbol/primera-division/barcelona-vs-real-madrid/cronica/2021/10/24/6175b1a3e2704e8b6d8b45c8.html', 'barcamadrid.csv')
+    # main('https://www.marca.com/futbol/primera-division/barcelona-vs-real-madrid/cronica/2021/10/24/6175b1a3e2704e8b6d8b45c8.html', 'barcamadrid.csv')
     fire.Fire(main)
