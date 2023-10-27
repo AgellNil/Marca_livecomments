@@ -30,9 +30,9 @@ def obtener_equipos_desde_url(url):
 
 def scrape_comments_live(url, aux):
     equipo_a, equipo_b = obtener_equipos_desde_url(url)
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(options=chrome_options)
+    firefox_options = Options()
+    firefox_options.add_argument("--headless")
+    driver = webdriver.Firefox(options=firefox_options)
     driver.get(url)
     time.sleep(5)
 
